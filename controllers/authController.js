@@ -154,3 +154,51 @@ exports.logout = (req, res) => {
   res.clearCookie('token');
   res.status(200).redirect('/login');
 };
+
+exports.verifyUserForReset = async (req, res) => {
+  try {
+    const { email } = req.body;  
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+   
+    res.status(200).redirect('/reset-password');
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.directResetPassword = async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // Hash the new password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+
+    await user.save();
+
+    res.status(200).redirect('/login');
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.getForgotPassword=(req,res)=>{
+
+     res.render('forget-password');
+
+}
+
+exports.getResetPassword=(req,res)=>{
+
+     res.render('reset-password');
+}

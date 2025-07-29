@@ -19,6 +19,8 @@ router.get('/events/delete/:id', verifyAdmin,  adminController.deleteEvent);
 router.get('/events/:id/registrations',verifyAdmin, adminController.getEventRegistrations);
 
 
+
+router.get('/logout',verifyAdmin, adminController.logoutAdmin);
 // Users list + search
 router.get('/users', verifyAdmin, adminController.getUsers);
 

@@ -8,16 +8,26 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      background: linear-gradient(to right, #ff9966, #ff5e62);
-      height: 100vh;
+      background: linear-gradient(135deg, #ff9966, #ff5e62);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      font-family: Arial, sans-serif;
     }
 
-    .card {
+    .login-card {
+      background: #fff;
       border-radius: 20px;
-      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+      box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.3);
+      padding: 2rem;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .login-card h3 {
+      font-weight: bold;
+      color: #ff5e62;
     }
 
     .form-control {
@@ -28,39 +38,63 @@
       background-color: #ff5e62;
       color: white;
       border-radius: 10px;
+      font-weight: bold;
+      transition: 0.3s;
     }
 
     .btn-custom:hover {
       background-color: #ff4b50;
+      transform: scale(1.03);
+    }
+
+    .forgot-link,
+    .signup-link {
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .forgot-link:hover,
+    .signup-link:hover {
+      color: #ff5e62;
+    }
+
+    .form-check-label {
+      font-size: 0.9rem;
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="card p-4" style="max-width: 400px; margin: auto;">
-      <h3 class="text-center mb-4">Welcome Back</h3>
-      <form action="/login" method="POST">
-        <div class="mb-3">
-          <label for="email" class="form-label">Email address</label>
-          <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password" name="password" placeholder="Enter password"
-            required>
-        </div>
-        <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="isAdmin" name="isAdmin">
-          <label class="form-check-label" for="isAdmin">Login as Admin</label>
-        </div>
+  <div class="login-card">
+    <h3 class="text-center mb-4">Welcome Back</h3>
+    <form action="/login" method="POST">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
+      </div>
+      <div class="mb-2">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+      </div>
 
-        <button type="submit" class="btn btn-custom w-100">Login</button>
-        <p class="text-center mt-3">Don't have an account? <a href="/signup" class="text-decoration-none">Sign
-            Up</a>
-        </p>
-      </form>
-    </div>
+      <!-- Forgot password link -->
+      <div class="d-flex justify-content-end mb-3">
+        <a href="/forgot-password" class="forgot-link">Forgot Password?</a>
+      </div>
+
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="isAdmin" name="isAdmin">
+        <label class="form-check-label" for="isAdmin">Login as Admin</label>
+      </div>
+
+      <button type="submit" class="btn btn-custom w-100 mb-3">Login</button>
+
+      <p class="text-center mb-0">
+        Don't have an account?
+        <a href="/signup" class="signup-link fw-bold">Sign Up</a>
+      </p>
+    </form>
   </div>
 </body>
 

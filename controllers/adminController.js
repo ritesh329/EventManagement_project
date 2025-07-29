@@ -237,3 +237,17 @@ exports.toggleBlock = async (req, res) => {
     res.status(500).send('Error updating user');
   }
 };
+
+// adminController.js
+
+exports.logoutAdmin = (req, res) => {
+  try {
+  
+    res.clearCookie('token'); 
+    return res.redirect('/login'); 
+  } catch (err) {
+    console.error('Logout error:', err);
+    res.status(500).send('Server error');
+  }
+};
+
