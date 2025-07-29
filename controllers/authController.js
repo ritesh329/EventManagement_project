@@ -161,14 +161,14 @@ exports.verifyUserForReset = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).render('fail',{ message: 'User not found' });
     }
 
    
     res.status(200).redirect('/reset-password');
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).render('fail',{ message: 'Server error' });
   }
 };
 
@@ -177,7 +177,7 @@ exports.directResetPassword = async (req, res) => {
     const { email, newPassword } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) return res.status(404).render('fail',{ message: 'User not found' });
 
     // Hash the new password
     const salt = await bcrypt.genSalt(10);
@@ -188,7 +188,7 @@ exports.directResetPassword = async (req, res) => {
     res.status(200).redirect('/login');
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).render('fail',{ message: 'Server error' });
   }
 };
 
