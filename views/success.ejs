@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Success</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light d-flex align-items-center" style="min-height:100vh;">
+  <div class="container text-center">
+    <div class="card shadow p-5">
+      <h1 class="text-success mb-4">🎉 Registered Successfully!</h1>
+      <p class="lead">Your registration is complete.</p>
+
+      <% if (typeof certificate !=='undefined' && certificate) { %>
+        <p class="mt-3">
+          <a href="<%= certificate %>" target="_blank" class="btn btn-primary">
+            Download Certificate
+          </a>
+        </p>
+        <% } %>
+
+          <a href="/" class="btn btn-secondary mt-4">Go to Home</a>
+    </div>
+  </div>
+</body>
+
+</html>

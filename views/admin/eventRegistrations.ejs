@@ -1,0 +1,25 @@
+<%- include('../partials/header') %>
+  <div class="container mt-4">
+    <h2>Event Registrations</h2>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>User Name</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% registrations.forEach(r=> { %>
+          <tr>
+            <td>
+              <%= r.userId.name %>
+            </td>
+            <td>
+              <%= r.userId.email %>
+            </td>
+          </tr>
+          <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <%- include('../partials/footer') %>

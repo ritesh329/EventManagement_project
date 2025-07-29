@@ -1,0 +1,51 @@
+<%- include('../partials/header') %>
+  <div class="container mt-4">
+    <h2>Manage Events</h2>
+    <a href="/admin/events/add" class="btn btn-primary mb-3">+ Add Event</a>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Title</th>
+          <th>Location</th>
+          <th>Date</th>
+          <th>Capacity</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% events.forEach(e=> { %>
+          <tr>
+            <td>
+              <% if(e.image){ %>
+                <img src="<%= e.image %>" alt="Event Image"
+                  style="width: 80px; height: 50px; object-fit: cover; border-radius: 5px;">
+                <% } else { %>
+                  <span class="text-muted">No Image</span>
+                  <% } %>
+            </td>
+            <td>
+              <%= e.title %>
+            </td>
+            <td>
+              <%= e.location %>
+            </td>
+            <td>
+              <%= new Date(e.date).toLocaleString('en-GB',{ day:'2-digit', month:'short', year:'numeric',
+                hour:'2-digit', minute:'2-digit', hour12:true }) %>
+            </td>
+            <td>
+              <%= e.capacity %>
+            </td>
+            <td>
+              <a href="/admin/events/edit/<%= e._id %>" class="btn btn-warning btn-sm">Edit</a>
+              <a href="/admin/events/delete/<%= e._id %>" onclick="return confirm('Delete?')"
+                class="btn btn-danger btn-sm">Delete</a>
+              <a href="/admin/events/<%= e._id %>/registrations" class="btn btn-info btn-sm">Registrations</a>
+            </td>
+          </tr>
+          <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <%- include('../partials/footer') %>

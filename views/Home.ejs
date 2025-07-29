@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Horizon | All Events</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-color: #6c63ff;
+      --secondary-color: #4d44db;
+      --accent-color: #ff6584;
+      --dark-color: #2d3748;
+      --light-color: #f8f9fa;
+      --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    body {
+      background: var(--gradient-bg);
+      min-height: 100vh;
+      color: var(--light-color);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .header-section {
+      text-align: center;
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .header-title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, white, #e0e0e0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .container {
+      margin-top: 2rem;
+      padding-bottom: 3rem;
+    }
+
+    .event-card {
+      background: white;
+      color: var(--dark-color);
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      height: 100%;
+      margin-bottom: 1.5rem;
+      border: none;
+    }
+
+    .event-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .past-event {
+      position: relative;
+    }
+
+    .past-event::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.2);
+      z-index: 1;
+    }
+
+    .past-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: var(--accent-color);
+      color: white;
+      padding: 5px 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 20px;
+      z-index: 2;
+    }
+
+    .event-image {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .event-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .event-card:hover .event-image img {
+      transform: scale(1.05);
+    }
+
+    .event-title-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+      color: white;
+      padding: 15px 20px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      z-index: 1;
+    }
+
+    .event-details {
+      padding: 20px;
+      flex-grow: 1;
+    }
+
+    .event-details p {
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .event-details i {
+      margin-right: 8px;
+      color: var(--primary-color);
+      width: 20px;
+      text-align: center;
+    }
+
+    .btn-custom {
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--secondary-color);
+      border-color: var(--secondary-color);
+      transform: translateY(-2px);
+    }
+
+    .search-box {
+      max-width: 500px;
+      margin: 0 auto 30px;
+    }
+
+    .search-input-group {
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary-color);
+    }
+
+    .search-input {
+      padding-left: 45px;
+      border-radius: 50px;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-input:focus {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .search-btn {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-btn:hover {
+      background: var(--secondary-color);
+    }
+
+    .clear-search-btn {
+      margin-left: 10px;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      margin: 2rem 0;
+    }
+
+    .no-results i {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .loading-spinner {
+      margin: 2rem 0;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      margin: 3rem 0 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: var(--accent-color);
+      border-radius: 2px;
+    }
+
+    .action-btn {
+      border-radius: 50px;
+      padding: 10px 25px;
+      font-weight: 500;
+      margin: 0 10px;
+      transition: all 0.2s;
+    }
+
+    .action-btn i {
+      margin-right: 8px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 1.5rem 0;
+      background: rgba(0, 0, 0, 0.1);
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header-section">
+      <h1 class="header-title">Event Management</h1>
+      <p class="lead">Discover amazing events near you</p>
+
+      <div class="d-flex justify-content-center mt-3">
+        <a href="/api/getusereventdata" class="btn btn-light action-btn">
+          <i class="fas fa-calendar-check"></i> My Events
+        </a>
+        <a href="/logout" class="btn btn-outline-light action-btn">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </div>
+    </div>
+
+    <!-- Search Box (unchanged structure) -->
+    <div class="search-box">
+      <div class="input-group">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search by title or location...">
+        <button class="btn btn-primary" id="searchButton">
+          <i class="fas fa-search"></i>
+        </button>
+        <button class="btn btn-secondary" id="clearSearch">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="text-center my-4" id="loadingSpinner" style="display: none;">
+      <div class="spinner-border text-light" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <!-- Upcoming Events -->
+    <h2 class="section-title">Upcoming Events</h2>
+    <div class="row g-4 mb-5" id="upcomingEvents">
+      <% if (upcoming.length===0) { %>
+        <div class="col-12">
+          <div class="no-results">
+            <i class="far fa-calendar-alt"></i>
+            <p>No upcoming events scheduled</p>
+          </div>
+        </div>
+        <% } %>
+
+          <% upcoming.forEach((item)=>{ %>
+            <div class="col-md-4 event-item" data-title="<%= item.title.toLowerCase() %>"
+              data-location="<%= item.location.toLowerCase() %>">
+              <div class="event-card">
+                <div class="event-image">
+                  <img src="<%= item.image || '/images/default.jpg' %>" alt="Event Image">
+                  <div class="event-title-overlay">
+                    <%= item.title %>
+                  </div>
+                </div>
+
+                <div class="event-details">
+                  <p><i class="fas fa-map-marker-alt"></i>
+                    <%= item.location %>
+                  </p>
+                  <p><i class="fas fa-calendar-alt"></i>
+                    <%= new Date(item.date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) %>
+                  </p>
+                  <p><i class="fas fa-users"></i>
+                    <%= item.capacity %> attendees
+                  </p>
+
+                  <div class="mt-3 d-flex justify-content-between">
+                    <a href="/api/events/<%= item._id %>" class="btn btn-primary btn-custom">
+                      <i class="fas fa-info-circle"></i> Details
+                    </a>
+
+                    <% if (item.remainingCapacity> 0) { %>
+                      <a href="/api/events/<%= item._id %>/register" class="btn btn-success btn-custom">
+                        <i class="fas fa-ticket-alt"></i> Register
+                      </a>
+                      <% } else { %>
+                        <button class="btn btn-secondary btn-custom" disabled>
+                          <i class="fas fa-times-circle"></i> Full
+                        </button>
+                        <% } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% }); %>
+    </div>
+
+    <!-- Past Events -->
+    <h2 class="section-title">Past Events</h2>
+    <div class="row g-4" id="pastEvents">
+      <% if (past.length===0) { %>
+        <div class="col-12">
+          <div class="no-results">
+            <i class="far fa-clock"></i>
+            <p>No past events to display</p>
+          </div>
+        </div>
+        <% } %>
+
+          <% past.forEach((item)=>{ %>
+            <div class="col-md-4 event-item" data-title="<%= item.title.toLowerCase() %>"
+              data-location="<%= item.location.toLowerCase() %>">
+              <div class="event-card past-event">
+                <div class="event-image">
+                  <img src="<%= item.image || '/images/default.jpg' %>" alt="Event Image">
+                  <div class="event-title-overlay">
+                    <%= item.title %>
+                  </div>
+                  <div class="past-badge">Past Event</div>
+                </div>
+
+                <div class="event-details">
+                  <p><i class="fas fa-map-marker-alt"></i>
+                    <%= item.location %>
+                  </p>
+                  <p>
+                    <i class="fas fa-calendar-alt"></i>
+                    <%= new Date(item.date).toLocaleString() %>
+                  </p>
+
+                  <p><i class="fas fa-users"></i>
+                    <%= item.capacity %> attendees
+                  </p>
+
+                  <div class="mt-3 d-flex justify-content-between">
+                    <a href="/api/events/<%= item._id %>" class="btn btn-primary btn-custom">
+                      <i class="fas fa-info-circle"></i> Details
+                    </a>
+                    <button class="btn btn-dark btn-custom" disabled>
+                      <i class="fas fa-clock"></i> Ended
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% }); %>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="mb-0">© 2023 Event Horizon. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Your original search functionality - completely untouched -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const searchInput = document.getElementById('searchInput');
+      const searchButton = document.getElementById('searchButton');
+      const clearSearch = document.getElementById('clearSearch');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+
+      const upcomingContainer = document.getElementById('upcomingEvents');
+      const pastContainer = document.getElementById('pastEvents');
+
+      const upcomingEvents = Array.from(document.querySelectorAll('#upcomingEvents .event-item'));
+      const pastEvents = Array.from(document.querySelectorAll('#pastEvents .event-item'));
+
+      // Remove previous "no results" message
+      function removeNoResultMessage(container) {
+        const msg = container.querySelector('.no-results-msg');
+        if (msg) msg.remove();
+      }
+
+      // Show "no results" message
+      function showNoResultMessage(container, text) {
+        removeNoResultMessage(container);
+        const div = document.createElement('div');
+        div.className = 'no-results-msg text-center w-100';
+        div.style.padding = '1rem';
+        div.innerHTML = `<p class="text-white">${text}</p>`;
+        container.appendChild(div);
+      }
+
+      function filterEvents() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        removeNoResultMessage(upcomingContainer);
+        removeNoResultMessage(pastContainer);
+
+        let upcomingHasResults = false;
+        let pastHasResults = false;
+
+        // Filter upcoming events
+        upcomingEvents.forEach(event => {
+          const title = event.dataset.title;
+          const location = event.dataset.location;
+
+          if (!searchTerm || title.includes(searchTerm) || location.includes(searchTerm)) {
+            event.style.display = '';
+            if (searchTerm) upcomingHasResults = true;
+          } else {
+            event.style.display = 'none';
+          }
+        });
+
+        // Filter past events
+        pastEvents.forEach(event => {
+          const title = event.dataset.title;
+          const location = event.dataset.location;
+
+          if (!searchTerm || title.includes(searchTerm) || location.includes(searchTerm)) {
+            event.style.display = '';
+            if (searchTerm) pastHasResults = true;
+          } else {
+            event.style.display = 'none';
+          }
+        });
+
+        // Show "no results" messages
+        if (searchTerm && !upcomingEvents.some(e => e.style.display !== 'none')) {
+          showNoResultMessage(upcomingContainer, 'No upcoming events match your search.');
+        }
+
+        if (searchTerm && !pastEvents.some(e => e.style.display !== 'none')) {
+          showNoResultMessage(pastContainer, 'No past events match your search.');
+        }
+      }
+
+      // Search button click
+      searchButton.addEventListener('click', function () {
+        loadingSpinner.style.display = 'block';
+        setTimeout(() => {
+          filterEvents();
+          loadingSpinner.style.display = 'none';
+        }, 200);
+      });
+
+      // Clear search
+      clearSearch.addEventListener('click', function () {
+        searchInput.value = '';
+        loadingSpinner.style.display = 'block';
+        setTimeout(() => {
+          filterEvents();
+          loadingSpinner.style.display = 'none';
+        }, 200);
+      });
+
+      // Enter key in input
+      searchInput.addEventListener('keyup', function (e) {
+        if (e.key === 'Enter') {
+          loadingSpinner.style.display = 'block';
+          setTimeout(() => {
+            filterEvents();
+            loadingSpinner.style.display = 'none';
+          }, 200);
+        }
+      });
+    });
+
+
+
+
+
+  </script>
+
+
+</body>
+
+</html>

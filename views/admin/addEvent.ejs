@@ -1,0 +1,44 @@
+<%- include('../partials/header') %>
+
+  <div class="container mt-4">
+    <h2>Add Event</h2>
+
+    <form action="/admin/events/add" method="POST" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label class="form-label">Event Title</label>
+        <input type="text" class="form-control" name="title" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Location</label>
+        <input type="text" class="form-control" name="location" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Date</label>
+        <input type="datetime-local" class="form-control" name="date" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Capacity</label>
+        <input type="number" class="form-control" name="capacity" required>
+      </div>
+
+
+      <div class="mb-3">
+        <label class="form-label">Event Description</label>
+        <textarea class="form-control" name="description" rows="4" placeholder="Write a brief description of the event"
+          required></textarea>
+      </div>
+
+
+      <div class="mb-3">
+        <label class="form-label">Event Image</label>
+        <input type="file" class="form-control" name="image" accept="image/*" required>
+      </div>
+
+      <button class="btn btn-success">Save</button>
+    </form>
+  </div>
+
+  <%- include('../partials/footer') %>

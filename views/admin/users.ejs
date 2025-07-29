@@ -1,0 +1,122 @@
+<%- include('../partials/header') %>
+
+  <style>
+    .page-header {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-bar {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    table {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    thead {
+      background: #6a11cb;
+      color: white;
+    }
+
+    .btn-sm {
+      padding: 4px 10px;
+      font-size: 0.85rem;
+      border-radius: 8px;
+    }
+
+    .profile-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #ddd;
+    }
+
+    .badge {
+      padding: 6px 10px;
+      font-size: 0.8rem;
+    }
+  </style>
+
+  <div class="container mt-4">
+
+    <!-- Header -->
+    <div class="page-header">
+      <h2 class="mb-0"><i class="fas fa-users"></i> Manage Users</h2>
+      <p class="mb-0">Search, block/unblock, or delete user accounts</p>
+    </div>
+
+    <!-- Search Form -->
+    <div class="search-bar">
+      <form method="GET" action="/admin/users" class="d-flex">
+        <input type="text" name="search" value="<%= search %>" class="form-control me-2"
+          placeholder="Search by name or email">
+        <button class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+      </form>
+    </div>
+
+    <!-- Users Table -->
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Profile</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(u=> { %>
+            <tr>
+              <td>
+                <% if (u.profileImage) { %>
+                  <img src="<%= u.profileImage %>" class="profile-img">
+                  <% } else { %>
+                    <span class="text-muted">No Image</span>
+                    <% } %>
+              </td>
+              <td><strong>
+                  <%= u.name %>
+                </strong></td>
+              <td>
+                <%= u.email %>
+              </td>
+              <td>
+                <% if (u.isBlocked) { %>
+                  <span class="badge bg-danger">Blocked</span>
+                  <% } else { %>
+                    <span class="badge bg-success">Active</span>
+                    <% } %>
+              </td>
+              <td class="text-center">
+                <a href="/admin/users/toggle-block/<%= u._id %>" class="btn btn-warning btn-sm">
+                  <i class="fas <%= u.isBlocked ? 'fa-unlock' : 'fa-ban' %>"></i>
+                  <%= u.isBlocked ? 'Unblock' : 'Block' %>
+                </a>
+                <a href="/admin/users/delete/<%= u._id %>" onclick="return confirm('Delete this user?')"
+                  class="btn btn-danger btn-sm">
+                  <i class="fas fa-trash"></i> Delete
+                </a>
+              </td>
+            </tr>
+            <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
