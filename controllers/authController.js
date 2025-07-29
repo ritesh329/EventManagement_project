@@ -157,7 +157,7 @@ exports.logout = (req, res) => {
 
 exports.verifyUserForReset = async (req, res) => {
   try {
-    const { email } = req.body;  
+    const email = (req.body.email).trim();  
 
     const user = await User.findOne({ email });
     if (!user) {
@@ -174,14 +174,15 @@ exports.verifyUserForReset = async (req, res) => {
 
 exports.directResetPassword = async (req, res) => {
   try {
-    const { email, newPassword } = req.body;
+    const  email = (req.body.email).trim();
+     const  password = (req.body.password).trim();
 
     const user = await User.findOne({ email });
     if (!user) return res.status(404).render('fail',{ message: 'User not found' });
 
     // Hash the new password
     const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
+    user.password = await bcrypt.hash(password, salt);
 
     await user.save();
 

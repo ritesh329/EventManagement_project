@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const eventSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
+
   },
   date: {
     type: Date,
@@ -11,7 +13,8 @@ const eventSchema = new mongoose.Schema({
   },
   location: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
   },
   capacity: {
     type: Number,
@@ -21,11 +24,13 @@ const eventSchema = new mongoose.Schema({
   },
   image: {
     type: String, 
-    default: ""   
+    default: "",
+    trim: true,   
   },
   description:{
       type:String,
-       default: "" 
+       default: "" ,
+       trim: true,
   }
 });
 

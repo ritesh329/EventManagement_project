@@ -4,11 +4,13 @@ const adminSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,  // require → required होना चाहिए
-    unique: true
+    unique: true,
+    trim: true, // Trim whitespace
   },
    password: {
     type: String,
     required: true,
+    trim: true,
   }
 });
 
