@@ -13,7 +13,7 @@ exports.signup = async (req, res) => {
 
     // Validation
     if (!name || !email || !password || !profileImage) {
-      return res.status(400).json({ error: 'All fields are required' });
+      return res.status(400).render('fail',{ message: 'All fields are required' });
     }
 
    
@@ -45,7 +45,7 @@ exports.signup = async (req, res) => {
           name,
           email,
           password: hashedPassword,
-          profileImage: imageUrl
+          profileImage: imageUrl 
         });
 
         await user.save();
