@@ -175,22 +175,29 @@ exports.verifyUserForReset = async (req, res) => {
 
 exports.directResetPassword = async (req, res) => {
   try {
-    const  email = (req.body.email).trim();
-     const  password = (req.body.password).trim();
+    const email = req.body.email?.trim();
+    const password = req.body.password?.trim();
+
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).render('fail', { message: 'Email and password are required' });
+    }
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).render('fail',{ message: 'User not found' });
+    if (!user) {
+      return res.status(404).render('fail', { message: 'User not found' });
+    }
 
-    // Hash the new password
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = hashedPassword;
 
     await user.save();
 
-    res.status(200).redirect('/login');
+    return res.status(200).redirect('/login');
   } catch (err) {
-    console.error(err);
-    res.status(500).render('fail',{ message: 'Server error' });
+    console.error('Reset password error:', err);
+    return res.status(500).render('fail', { message: 'Server error while resetting password' });
   }
 };
 
