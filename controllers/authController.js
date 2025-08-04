@@ -176,7 +176,7 @@ exports.verifyUserForReset = async (req, res) => {
 exports.directResetPassword = async (req, res) => {
   try {
     const email = req.body.email?.trim();
-    const password = req.body.password?.trim();
+    const password = req.body.newPassword?.trim();
 
     // Validate input
     if (!email || !password) {
