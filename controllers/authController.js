@@ -7,68 +7,64 @@ const Admin = require('../models/admin');
 
 
 exports.signup = async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    const profileImage = req.file; 
+  const { name, email, password } = req.body;
+  const profileImage = req.file;
 
-    // Validation
-    if (!name || !email || !password || !profileImage) {
-      return res.status(400).render('fail',{ message: 'All fields are required' });
+  // Basic validation
+  if (!name || !email || !password || !profileImage) {
+    return res.status(400).render('fail', { message: 'All fields are required' });
+  }
+
+  try {
+    // Check for existing user
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).render('fail', {
+        message: 'User Already Exists, please enter a different email',
+      });
     }
 
-     const userexist=await User.findOne({email});
-
-     if(userexist){
-            return res.status(400).render('fail',{ message: 'User Already Exists please enter diffrent email' });
-     } 
-   
+    // Prepare file upload to Firebase
     const fileName = `profiles/${Date.now()}-${profileImage.originalname}`;
     const blob = bucket.file(fileName);
     const blobStream = blob.createWriteStream({
-      metadata: { contentType: profileImage.mimetype }
+      metadata: { contentType: profileImage.mimetype },
     });
 
-    // Error event handle
     blobStream.on('error', (err) => {
       console.error('Upload error:', err);
-      return res.status(500).render('fail',{ message: 'File upload failed' });
+      return res.status(500).render('fail', { message: 'File upload failed' });
     });
 
-   
     blobStream.on('finish', async () => {
       try {
-         // Make the file public (IMPORTANT)
         await blob.makePublic();
-        // Firebase public URL
         const imageUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
 
-        // Password hash
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // New user create
-        const user = new User({
+        const newUser = new User({
           name,
           email,
           password: hashedPassword,
-          profileImage: imageUrl 
+          profileImage: imageUrl,
         });
 
-        await user.save();
-
-        // Signup success
+        await newUser.save();
         return res.status(201).render('login');
-      } catch (dbErr) {
-        console.error('Database save error:', dbErr);
-        return res.status(500).render('fail',{ message: 'Server error while saving user' });
+      } catch (saveErr) {
+        console.error('Database save error:', saveErr);
+        return res.status(500).render('fail', {
+          message: 'Server error while saving user',
+        });
       }
     });
 
-   
+    // Start uploading
     blobStream.end(profileImage.buffer);
-
   } catch (err) {
     console.error('Signup error:', err);
-    res.status(500).json({ error: 'Server error' });
+    return res.status(500).render('fail', { message: 'Server error' });
   }
 };
 
