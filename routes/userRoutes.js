@@ -1,18 +1,43 @@
+// const express = require('express');
+// const router = express.Router();
+
+// const upload = require('../middleware/upload');
+// const Authcontroller = require('../controllers/authController');
+
+// const { verifyToken } = require('../middleware/authMiddleware');
+
+
+// router.get('/',verifyToken,Authcontroller.checkLogin);
+
+
+// router.get('/signUp',Authcontroller.getSignUp);
+// router.get('/login',Authcontroller.getlogin);
+// router.post('/signup', upload.single('profileImage'),Authcontroller.signup);
+// router.post('/login', Authcontroller.login);
+
+// router.get('/logout', Authcontroller.logout);
+
+// router.get('/forgot-password', Authcontroller.getForgotPassword);
+// router.post('/forgot-password', Authcontroller.verifyUserForReset);
+
+// // Step 2: Reset password directly
+// router.post('/reset-password', Authcontroller.directResetPassword);
+// router.get('/reset-password', Authcontroller.getResetPassword);
+// module.exports = router;
+
+
 const express = require('express');
 const router = express.Router();
 
-const upload = require('../middleware/upload');
+const { upload } = require('../config/cloudinary'); // ✅ Cloudinary se import
 const Authcontroller = require('../controllers/authController');
-
 const { verifyToken } = require('../middleware/authMiddleware');
 
+router.get('/', verifyToken, Authcontroller.checkLogin);
 
-router.get('/',verifyToken,Authcontroller.checkLogin);
-
-
-router.get('/signUp',Authcontroller.getSignUp);
-router.get('/login',Authcontroller.getlogin);
-router.post('/signup', upload.single('profileImage'),Authcontroller.signup);
+router.get('/signUp', Authcontroller.getSignUp);
+router.get('/login', Authcontroller.getlogin);
+router.post('/signup', upload.single('profileImage'), Authcontroller.signup); // ✅ Cloudinary middleware
 router.post('/login', Authcontroller.login);
 
 router.get('/logout', Authcontroller.logout);
@@ -23,4 +48,5 @@ router.post('/forgot-password', Authcontroller.verifyUserForReset);
 // Step 2: Reset password directly
 router.post('/reset-password', Authcontroller.directResetPassword);
 router.get('/reset-password', Authcontroller.getResetPassword);
+
 module.exports = router;
